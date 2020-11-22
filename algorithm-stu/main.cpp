@@ -74,8 +74,38 @@ int test02()
 
 	return maxlen;
 }
+
+//减而治之
+int test03()
+{
+	vector<int> v = { 4, 7, 8, 32, 7,9 };
+	int sum = 0;
+	for (int i = 0; i < v.size(); i++)
+	{
+		sum += v[i];
+	}
+	return sum;
+}
+
+//分而治之
+int sum(vector<int> v, int n)
+{
+	return n < 1 ? 0 : sum(v, n - 1) + v[n - 1];
+}
+
+int sumdivi(vector<int> v, int high, int low)
+{
+	if (low == high)
+	{
+		return v[low];
+	}
+	int mid = (low + high) >> 1;
+	return sumdivi(v, low, mid) + sumdivi(v, mid + 1, high);
+}
+
 int main()
 {
 	//cout << test01() << endl;;
 	cout << test02();
+	test03();
 }
