@@ -103,9 +103,78 @@ int sumdivi(vector<int> v, int high, int low)
 	return sumdivi(v, low, mid) + sumdivi(v, mid + 1, high);
 }
 
+void test04()
+{
+	char a[200];
+	//cin.getline(a, 200, " ");
+	cin.getline(a, 200);
+	
+	cout<<a;
+
+	int m, n,  b, c, d;
+	int x = 0;
+	x = x + 7;
+}
+
+//查找元素-方法1 二分查找--递归
+template<class T>
+int binsearchRecur(vector<T>& v, T e, int low, int high)
+{
+	int mid = (low + high) >> 1;
+	if (low < high)
+	{
+		if (e < v[mid])
+		{
+			binsearch(v, e, low, mid);
+		}
+		else if (v[mid] < e)
+		{
+			binsearch(v, e, mid + 1, high);
+		}
+		else
+		{
+			return mid;
+		}
+	}
+	return -1;
+}
+//版本1：查找长度即：关键码的比较次数。 查找成功和查找失败的比较次数，以及平均的性能，作为算法的评估，性能o(logn)
+//查找元素-方法1 二分查找--迭代
+template<class T>
+int binsearch(vector<T>& v, const T& e, int low, int high)
+{
+	int mid = (low + high) >> 1;
+	while (low < high)
+	{
+		if (e < v[mid])
+		{
+			high = mid;
+		}
+		else if (v[mid] < e)
+		{
+			low = mid + 1;
+		}
+		else
+		{
+			return mid;
+		}
+	}
+	return -1;
+}
+
+//版本1 我们查找成功和失败比较的递归深度是相同的，但是关键码的比较次数不同，具体的就是转向左分支为一次，右分支的为两次，通过递归深度的不同，对转向成本的不均衡进行补偿，平均查找长度可以补偿
+//实际上我们可以去fibonacci数黄金比例来确认切割点
+void test05()
+{
+	vector<int> v = { 4, 7, 8, 32, 68,98 };
+	int ret =  binsearch(v, 8, 0, v.size()- 1);
+	cout << "find:     " << ret << endl;
+}
 int main()
 {
 	//cout << test01() << endl;;
-	cout << test02();
-	test03();
+	//cout << test02();
+	//test03();
+	//test04();
+	test05();
 }
