@@ -120,16 +120,16 @@ void test04()
 template<class T>
 int binsearchRecur(vector<T>& v, T e, int low, int high)
 {
-	int mid = (low + high) >> 1;
 	if (low < high)
 	{
+		int mid = (low + high) >> 1;
 		if (e < v[mid])
 		{
-			binsearch(v, e, low, mid);
+			return binsearchRecur(v, e, low, mid);
 		}
 		else if (v[mid] < e)
 		{
-			binsearch(v, e, mid + 1, high);
+			return binsearchRecur(v, e, mid + 1, high);
 		}
 		else
 		{
@@ -140,12 +140,14 @@ int binsearchRecur(vector<T>& v, T e, int low, int high)
 }
 //版本1：查找长度即：关键码的比较次数。 查找成功和查找失败的比较次数，以及平均的性能，作为算法的评估，性能o(logn)
 //查找元素-方法1 二分查找--迭代
+//优化版-待实现，分析以上我们查找成功和失败比较的递归深度是相同的，但是关键码的比较次数不同，具体的就是转向左分支为一次，右分支的为两次，通过递归深度的不同，对转向成本的不均衡进行补偿，平均查找长度可以补偿
+//实际上我们可以去fibonacci数黄金比例来确认切割点
 template<class T>
 int binsearch(vector<T>& v, const T& e, int low, int high)
 {
-	int mid = (low + high) >> 1;
 	while (low < high)
 	{
+		int mid = (low + high) >> 1;
 		if (e < v[mid])
 		{
 			high = mid;
@@ -162,12 +164,17 @@ int binsearch(vector<T>& v, const T& e, int low, int high)
 	return -1;
 }
 
-//版本1 我们查找成功和失败比较的递归深度是相同的，但是关键码的比较次数不同，具体的就是转向左分支为一次，右分支的为两次，通过递归深度的不同，对转向成本的不均衡进行补偿，平均查找长度可以补偿
-//实际上我们可以去fibonacci数黄金比例来确认切割点
 void test05()
 {
 	vector<int> v = { 4, 7, 8, 32, 68,98 };
-	int ret =  binsearch(v, 8, 0, v.size()- 1);
+	int ret =  binsearch(v, 8, 0, v.size());
+	cout << "find:     " << ret << endl;
+}
+
+void test06()
+{
+	vector<int> v = { 4, 7, 8, 32, 68,98 };
+	int ret = binsearchRecur(v, 8, 0, v.size());
 	cout << "find:     " << ret << endl;
 }
 int main()
@@ -176,5 +183,6 @@ int main()
 	//cout << test02();
 	//test03();
 	//test04();
-	test05();
+	//test05();
+	test06();
 }
