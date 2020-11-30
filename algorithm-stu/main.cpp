@@ -164,6 +164,19 @@ int binsearch(vector<T>& v, const T& e, int low, int high)
 	return -1;
 }
 
+//语义符合版--希望search返回的位置是不大于e的最后一个元素的位置pos，这样insert的位置pos+1
+template<class T>
+int binsearch3(vector<T>& v, const T& e, int low, int high)
+{
+	while (low < high)
+	{
+		int mid = (low + high) >> 1;
+		(e < v[mid]) ? high = mid : low = mid + 1;
+		
+	}
+	return --low;
+}
+
 void test05()
 {
 	vector<int> v = { 4, 7, 8, 32, 68,98 };
@@ -177,6 +190,44 @@ void test06()
 	int ret = binsearchRecur(v, 8, 0, v.size());
 	cout << "find:     " << ret << endl;
 }
+
+void test07()
+{
+	vector<int> v = { 4, 7, 8, 8, 32, 68,98 };
+	int ret = binsearch3(v, 8, 0, v.size());
+	cout << "find:     " << ret << endl;
+}
+//冒泡排序1
+template<typename T>
+void bubbleSort1(vector<T>& v)
+{
+	for (int j = 0; j < v.size() - 1; j++)
+	{
+		for (int i = 0; i < v.size() - 1 - j; i++)
+		{
+			if (v[i] > v[i + 1])
+			{
+				swap(v[i], v[i + 1]);
+			}
+		}
+	}
+	
+}
+
+//为什么此处不能用模板？？
+void print(int t)
+{
+	cout << "," << t;
+
+}
+void test08()
+{
+	vector<int> v = { 4,  8,68, 8, 32, 7,98 };
+	bubbleSort1(v);
+	for_each(v.begin(), v.end(), print);
+}
+
+
 int main()
 {
 	//cout << test01() << endl;;
@@ -184,5 +235,7 @@ int main()
 	//test03();
 	//test04();
 	//test05();
-	test06();
+	//test06();
+	//test07();
+	test08();
 }
