@@ -213,11 +213,35 @@ void bubbleSort1(vector<T>& v)
 	}
 	
 }
+template<class T>
+bool bubble(vector<T>& v, int low, int high)
+{
+	bool sorted = false;
+	for (int i = low; i < high; i++)
+	{
+		if (v[i] > v[i+1])
+		{
+			sorted = true;
+			swap(v[i], v[i + 1]);
+		}
+	}
+	if (!sorted)
+	{
+		return true;
+	}
+	return false;
+}
+
+template<typename T>
+void bubbleSort2(vector<T>& v, int low, int high)
+{
+	while (!bubble(v, low, high--));
+}
 
 //为什么此处不能用模板？？
 void print(int t)
 {
-	cout << "," << t;
+	cout  << t << ",";
 
 }
 void test08()
@@ -227,7 +251,12 @@ void test08()
 	for_each(v.begin(), v.end(), print);
 }
 
-
+void test09()
+{
+	vector<int> v = { 4,  8,68, 8, 32, 7,98 };
+	bubbleSort2(v, 0, v.size() - 1);
+	for_each(v.begin(), v.end(), print);
+}
 int main()
 {
 	//cout << test01() << endl;;
@@ -237,5 +266,6 @@ int main()
 	//test05();
 	//test06();
 	//test07();
-	test08();
+	//test08();
+	test09();
 }
