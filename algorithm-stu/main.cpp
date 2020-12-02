@@ -216,20 +216,16 @@ void bubbleSort1(vector<T>& v)
 template<class T>
 bool bubble(vector<T>& v, int low, int high)
 {
-	bool sorted = false;
+	bool sorted = true;
 	for (int i = low; i < high; i++)
 	{
 		if (v[i] > v[i+1])
 		{
-			sorted = true;
+			sorted = false;
 			swap(v[i], v[i + 1]);
 		}
 	}
-	if (!sorted)
-	{
-		return true;
-	}
-	return false;
+	return sorted;
 }
 
 template<typename T>
@@ -238,6 +234,22 @@ void bubbleSort2(vector<T>& v, int low, int high)
 	while (!bubble(v, low, high--));
 }
 
+template<class T>
+void bubbleSort3(vector<T>& v)
+{
+	int sortedHigh = 0;
+	for (int j = 0; j < v.size() - sortedHigh; j++)
+	{
+		for (int i = 0; i < v.size() - sortedHigh; i++)
+		{
+			if (v[i] > v[i + 1])
+			{
+				sortedHigh++;
+				swap(v[i], v[i + 1]);
+			}
+		}
+	}
+}
 //为什么此处不能用模板？？
 void print(int t)
 {
@@ -257,8 +269,23 @@ void test09()
 	bubbleSort2(v, 0, v.size() - 1);
 	for_each(v.begin(), v.end(), print);
 }
+
+void test10()
+{
+	vector<int> v = { 4,  8,68, 8, 32, 7,98 };
+	bubbleSort3(v);
+	for_each(v.begin(), v.end(), print);
+}
+
 int main()
 {
+	struct s
+	{
+		int a;
+		char b;
+		float f;
+	};
+	cout << sizeof(s) << endl;
 	//cout << test01() << endl;;
 	//cout << test02();
 	//test03();
@@ -267,5 +294,6 @@ int main()
 	//test06();
 	//test07();
 	//test08();
-	test09();
+	//test09();
+	test10();
 }
