@@ -243,23 +243,24 @@ void bubbleSort3(vector<T>& v)
 	{
 		int sorted = 0;
 		//sortedLow记录有序部分的最小的索引值，v.size() - sortedLow则为需要排序的区间
-		for (int i = 0; i < v.size() - sortedLow; i++)
+		for (int i = 0; ++i < v.size() - sortedLow; )
 		{
-			if ((i < v.size() - 1) && v[i] > v[i + 1])
+			if (v[i - 1] > v[i])
 			{
 				sorted++;//这部分是记录无序部分的最大值
-				swap(v[i], v[i + 1]);
+				swap(v[i - 1], v[i]);
 			}
 		}
 		//更新sortedLow保持记录了有序部分的最小值
 		sortedLow = sorted;
 	}
 }
+
+
 //为什么此处不能用模板？？
 void print(int t)
 {
 	cout  << t << ",";
-
 }
 void test08()
 {
