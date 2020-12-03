@@ -234,20 +234,25 @@ void bubbleSort2(vector<T>& v, int low, int high)
 	while (!bubble(v, low, high--));
 }
 
+//冒泡算法，有一部分已经有序了，这部分下次不需要再进行比较
 template<class T>
 void bubbleSort3(vector<T>& v)
 {
-	int sortedHigh = 0;
-	for (int j = 0; j < v.size() - sortedHigh; j++)
+	int sortedLow = 0;
+	for (int j = 0; j < v.size() - sortedLow; j++)
 	{
-		for (int i = 0; i < v.size() - sortedHigh; i++)
+		int sorted = 0;
+		//sortedLow记录有序部分的最小的索引值，v.size() - sortedLow则为需要排序的区间
+		for (int i = 0; i < v.size() - sortedLow; i++)
 		{
-			if (v[i] > v[i + 1])
+			if ((i < v.size() - 1) && v[i] > v[i + 1])
 			{
-				sortedHigh++;
+				sorted++;//这部分是记录无序部分的最大值
 				swap(v[i], v[i + 1]);
 			}
 		}
+		//更新sortedLow保持记录了有序部分的最小值
+		sortedLow = sorted;
 	}
 }
 //为什么此处不能用模板？？
@@ -278,14 +283,7 @@ void test10()
 }
 
 int main()
-{
-	struct s
-	{
-		int a;
-		char b;
-		float f;
-	};
-	cout << sizeof(s) << endl;
+{	
 	//cout << test01() << endl;;
 	//cout << test02();
 	//test03();
