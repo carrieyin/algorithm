@@ -3,6 +3,7 @@
 #include <unordered_map>
 #include <iostream>
 #include <algorithm>
+#include <queue>
 using namespace std;
 
 //查找最长连续队列
@@ -177,6 +178,8 @@ int binsearch3(vector<T>& v, const T& e, int low, int high)
 	return --low;
 }
 
+
+
 void test05()
 {
 	vector<int> v = { 4, 7, 8, 32, 68,98 };
@@ -197,7 +200,7 @@ void test07()
 	int ret = binsearch3(v, 8, 0, v.size());
 	cout << "find:     " << ret << endl;
 }
-//冒泡排序1
+//冒泡排序1-最简版
 template<typename T>
 void bubbleSort1(vector<T>& v)
 {
@@ -211,7 +214,6 @@ void bubbleSort1(vector<T>& v)
 			}
 		}
 	}
-	
 }
 template<class T>
 bool bubble(vector<T>& v, int low, int high)
@@ -228,13 +230,14 @@ bool bubble(vector<T>& v, int low, int high)
 	return sorted;
 }
 
+//冒泡排序算法2 比较过程中发现某一次排序全部都已经有序了，证明整个数组已经有序不需要再进行排序了
 template<typename T>
 void bubbleSort2(vector<T>& v, int low, int high)
 {
 	while (!bubble(v, low, high--));
 }
 
-//冒泡算法，有一部分已经有序了，这部分下次不需要再进行比较
+//冒泡算法3，比较过程发现有一部分已经有序了，记住这个有序点，这部分下次不需要再进行比较
 template<class T>
 void bubbleSort3(vector<T>& v)
 {
@@ -283,6 +286,73 @@ void test10()
 	for_each(v.begin(), v.end(), print);
 }
 
+//归并排序(向量和列表通用)
+/*
+分治策略
+思想：
+1.将待排序序列一分为二，时间o(1)
+2.对于划分的子序列，分别递归排序
+3.当子序列分别有序，合并有序子序列
+
+以：4,  8,68, 8, 32, 7, 98为例
+划分子序列[4, 8, 68, 8] [32, 7, 98]
+划分子序列[4, 8][68, 8] [32, 7], [98]
+划分子序列[4], [8],[68], [8], [32], [7], [98] 子序列有序
+合并子序列[4, 8][8, 68] [7，32], [98]
+合并子序列[4, 8，8, 68] [7，32, 98]
+合并子序列[4, 7, 8，8, 32, 68, 98]
+*/
+
+void merge(int *a, int low, int mid, int high)
+{
+	int * A = a + low;
+	int lb = mid - low;
+	int * B = new int[lb];
+	for (int i = 0; i < lb; i++)
+	{
+		B[i] = A[i];
+	}
+	int lc = high - mid;
+	
+	int * C = a + mid;
+
+	for (int i = 0, j = 0, k = 0; (j < lb || k < lc);)
+	{
+		if ((j < lb) && ((lc <= k) || (B[j] <= C[k])))
+		{
+			A[i++] = B[j++];
+		}
+		if ((k < lc) && ((lb <= j) || (C[k] < B[j])))
+		{
+			A[i++] = C[k++];
+		}
+	}
+
+}
+
+void mergeSort(int *a, int low, int high)
+{
+	if (high - low < 2)
+	{
+		return;
+	}
+
+    int mid = (high + low) >> 1;
+	mergeSort(a, low, mid);
+	mergeSort(a, mid, high);
+	merge(a, low, mid, high);
+}
+
+void test11()
+{
+	int v[7] = { 4,  8, 68, 8, 32, 7,98 };
+	mergeSort(v, 0, 7);
+	for (int i = 0; i < 7; i++)
+	{
+		cout << v[i] << endl;
+	}
+}
+
 int main()
 {	
 	//cout << test01() << endl;;
@@ -294,5 +364,7 @@ int main()
 	//test07();
 	//test08();
 	//test09();
-	test10();
+	//test10();
+	test11();
+
 }
