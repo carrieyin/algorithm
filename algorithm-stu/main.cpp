@@ -315,14 +315,28 @@ void merge(int *a, int low, int mid, int high)
 	int lc = high - mid;
 	
 	int * C = a + mid;
-
-	for (int i = 0, j = 0, k = 0; (j < lb || k < lc);)
+	//精简实现，因为C在A中，没有单独申请空间，所以当B合并完毕的时候，程序就可以结束,C不再拷贝
+	/*for (int i = 0, j = 0, k = 0; (j < lb || k < lc);)
 	{
 		if ((j < lb) && ((lc <= k) || (B[j] <= C[k])))
 		{
 			A[i++] = B[j++];
 		}
 		if ((k < lc) && ((lb <= j) || (C[k] < B[j])))
+		{
+			A[i++] = C[k++];
+		}
+	}*/
+
+	for (int i = 0, j = 0, k = 0; j < lb;)
+	{
+		//上面已经有j<lb判定可以删除重复的
+		if ((lc <= k) || (B[j] <= C[k]))
+		{
+			A[i++] = B[j++];
+		}
+		//执行完B的合并，不再拷贝C
+		if ((k < lc) && (C[k] < B[j]))
 		{
 			A[i++] = C[k++];
 		}
