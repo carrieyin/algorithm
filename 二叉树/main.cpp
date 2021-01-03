@@ -280,7 +280,7 @@ template<class T>
 class BinaryTree
 {
 public:
-
+	typedef TreeNode<T>* PTNODE;
 	BinaryTree(T* array, int length)
 	{
 		createBinTree(array, length);
@@ -307,23 +307,12 @@ private:
 	void createBinTree(T* array, int length) {
 		
 		int index = 0;
-		//createTree(rootNode, array, index, length);
-		CreateBinTree(rootNode, array, index, length, '#');
+		createTree(rootNode, array, index, length);
+		//CreateBinTree(rootNode, array, index, length, '#');
 
 	}
 	
-	void CreateBinTree(TreeNode<T>* & root, const T* array, int size, int& index, const T&invalid)
-	{
-		if (index < size && invalid != array[index])
-		{
-			//根节点
-			TreeNode<T>*  newNode = new TreeNode<T>(array[index]);
-			CreateBinTree(newNode->leftchild, array, size, ++index, invalid);
-			CreateBinTree(newNode->rightchild, array, size, ++index, invalid);
-			rootNode = newNode;
-		}
-	}
-	void createTree(TNode &pnode, T* array, int index, int length)
+	void createTree(PTNODE &pnode, T* array, int& index, int length)
 	{
 		if (index < length && array[index] != '#')
 		{
@@ -334,7 +323,7 @@ private:
 			createTree(node->leftchild, array, ++index, length);
 			//创建右孩子节点
 			createTree(node->rightchild, array, ++index, length);
-			//rootNode = pnode;
+			pnode = node;
 		}
 
 	}
