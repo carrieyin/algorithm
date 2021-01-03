@@ -291,7 +291,7 @@ public:
 		PTNODE node = rootNode;
 		while (1)
 		{
-			goAlongVistLeftBranch(node, s);
+			goAlongWithVistLeftBranch(node, s);
 			if (s.empty())
 			{
 				break;
@@ -301,7 +301,7 @@ public:
 		}
 	}
 
-	void goAlongVistLeftBranch(TreeNode<T> * &node, std::stack<TreeNode<T> *> &s)
+	void goAlongWithVistLeftBranch(TreeNode<T> * &node, std::stack<TreeNode<T> *> &s)
 	{
 		while (node != NULL)
 		{
