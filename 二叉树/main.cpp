@@ -287,49 +287,71 @@ public:
 	}
 	void preTraverse()
 	{
-		stack<TreeNode<T>* > s;
-		s.push(rootNode);
-		TreeNode<T>* node = rootNode;
-		while (node != NULL || !s.empty())
+		stack<PTNODE> s;
+		PTNODE node = rootNode;
+		while (1)
 		{
-			if (node == NULL)
+			while (node != NULL)
 			{
-				node = s.top();
-				s.pop();
+				cout << node->data << " , ";
+				s.push(node->rightchild);
+				node = node->leftchild;
 			}
-			cout << node->data << " , ";
-			node = node->leftchild;
-			s.push(node->rightchild);
+			if (s.empty())
+			{
+				break;
+			}
+			node = s.top();
+			s.pop();
 		}
 	}
 
+	void midTraverse()
+	{
+		stack<PTNODE> s;
+		PTNODE node = rootNode;
+		while (1)
+		{
+			while (node != NULL)
+			{
+				s.push(node);
+				node = node->leftchild;
+			}
+			if (s.empty())
+			{
+				break;
+			}
+			node = s.top();
+			s.pop();
+			if (node != NULL)
+			{
+				cout << node->data << ", ";	
+				node = node->rightchild;
+			}       	
+		}
+	}
 private:
 	void createBinTree(T* array, int length) {
 		
 		int index = 0;
-		createTree(rootNode, array, index, length);
-		//CreateBinTree(rootNode, array, index, length, '#');
-
+		createTree(rootNode, array, index, length, '#');
 	}
 	
-	void createTree(PTNODE &pnode, T* array, int& index, int length)
+	void createTree(PTNODE &pnode, T* array, int& index, int length, T inditcator)
 	{
-		if (index < length && array[index] != '#')
+		if (index < length && array[index] != inditcator)
 		{
 			//非空的节点值，创建节点
-			
 			TreeNode<T>* node = new TreeNode<T>(array[index]);
 			//创建左孩子节点
-			createTree(node->leftchild, array, ++index, length);
+			createTree(node->leftchild, array, ++index, length, inditcator);
 			//创建右孩子节点
-			createTree(node->rightchild, array, ++index, length);
+			createTree(node->rightchild, array, ++index, length, inditcator);
 			pnode = node;
 		}
-
 	}
-
+private:
 	TreeNode<T> *rootNode;
-	
 } ;
 
 void test01()
@@ -337,6 +359,7 @@ void test01()
 	char pStr[] = { 'A','B','D','#','#','#','C','E','#','#','F' };
 	BinaryTree<char> bt1(pStr, sizeof(pStr) / sizeof(pStr[0]));
 	bt1.preTraverse();
+	cout << endl;
 }
 
 void test02()
@@ -347,10 +370,16 @@ void test02()
 	cout << "递归前序遍历：" << endl;
 	bt1.PreOrder();
 }
+
+void test03()
+{
+	char pStr[] = { 'A','B','D','#','#','#','C','E','#','#','F' };
+	BinaryTree<char> bt1(pStr, sizeof(pStr) / sizeof(pStr[0]));
+	bt1.midTraverse();
+}
 int main()
 {
-	test02();
 	test01();
-	
+	test03();
 	cout << endl;
 }
