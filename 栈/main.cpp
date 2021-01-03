@@ -1,7 +1,9 @@
 #define  _CRT_SECURE_NO_WARNINGS
 
 #include <stack>
+#include <string>
 #include <vector>
+
 #include <iostream>
 using namespace std;
 //进制转换
@@ -67,14 +69,24 @@ bool isPermutationSeq(vector<int>& origin, vector<int>& seq)
 }
 
 //读取尽可能多的数字，因为计算时候可能有多位,本处先不考虑小数点
-void readNumber(char *s, stack<float>& opnd)
+void readNumber(const char **s, stack<float>& opnd)
 {
-	
-}
+	float result = 0;
+	stack<int> tem;
+	while (isdigit(**s))
+	{
+		tem.push(int(**s - '0'));
+		(*s)++;
+	}
+	int base = 1;
+	while (!tem.empty())
+	{
+		result += tem.top() * base;
+		base *= 10;
+		tem.pop();
+	}
 
-void readoptr(char * S)
-{
-	
+	opnd.push(result);
 }
 
 char compareOptr(char ch, char top)
@@ -104,25 +116,34 @@ char compareOptr(char ch, char top)
 		if (top == '(')
 			return '=';
 		else if (top == '#') {
-			printf("输入有误!\n");
+			cout << "输入有误!" << endl;;
 			exit(-1);
 		}
 		else {
 			return '<';
 		}
 		break;
+	case '!':
+		return '>';
+		break;
 	case '#':
+		if (top == '#')
+		{
+			return '=';
+		}
 		return '<';
+	default:
+		return ' ';
 	}
 }
 
 int calc(int f, char op)
 {
-	int result;
+	int result = 1;;
 	switch (op)
 	{
 	case '!':
-		for (int i = 0; i < n; i++)
+		for (int i = 0; i < f; i++)
 		{
 			result *= i;
 		}
@@ -145,8 +166,10 @@ float calc(float tempNum1, float tempNum2, char op)
 }
 //中缀表达式求值 s表达式
 //主体思想是，将操作符和元素分开栈存放
-//当运算符栈中遇到高优先级的运算符时，取出两个操作符和该运算符进行计算
-float evaluate(char * S)
+//如果后面的操作符的运算优化级比前面的操作符高，那么前面的操作符就必须延迟计算；
+//如果后面的操作符优化级比前面的低或者相等，那么前面的操作符就可以进行计算了。
+//逆波兰表达式的求法实际上也隐藏在其中，数字直接压栈，字符是按照top>*s的时候入栈运算符
+float evaluate(const char * S)
 {
 	stack<float> opnd; //操作数
 	stack<char> optr;  //操作符
@@ -155,13 +178,14 @@ float evaluate(char * S)
 	{
 		if (isdigit(*S))
 		{
-			readNumber(S, opnd);
+			readNumber(&S, opnd);
 		}
 		else
 		{
 			switch (compareOptr(optr.top(), *S))
 			{
 			case '>': //栈顶优先级高，则进行计算
+			{
 				char op = optr.top();
 				if (op == '!')
 				{
@@ -175,21 +199,33 @@ float evaluate(char * S)
 					opnd.pop();
 					float value2 = opnd.top();
 					opnd.pop();
-					float value = calc(value1, value2,op);
+					float value = calc(value1, value2, op);
 					opnd.push(value);
 				}
+				optr.pop();
 				break;
+			}
 
-			case '<': //栈顶符号优先级低，则延迟计算，放入栈中
-				optr.push(*S); S++; break;
+			case '<': //栈顶符号优先级低，则延迟计算，放入栈中				
+			{
+				optr.push(*S);
+				S++;
+				break;
+			}
 			case '=':
-				optr.pop(); S++;break;
+			{
+				optr.pop();
+				S++;
+				break;
+			}
+				
 			default:
 				break;
 			}
 		}
 	}
 	
+	return opnd.top();
 }
 void test01()
 {
@@ -226,8 +262,15 @@ void test02()
 	vector<int> seq2 = { 1, 3, 2, 7, 6, 5 };
 	cout << isPermutationSeq(v2, seq2) << endl;
 }
+
+void test03()
+{
+	const char * s = "1+2*3#";
+	cout << evaluate(s) << endl;
+}
 int main()
 {
 	//test01();
-	test02();
+	//test02();
+	test03();
 }
