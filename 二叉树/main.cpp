@@ -291,12 +291,7 @@ public:
 		PTNODE node = rootNode;
 		while (1)
 		{
-			while (node != NULL)
-			{
-				cout << node->data << " , ";
-				s.push(node->rightchild);
-				node = node->leftchild;
-			}
+			goAlongVistLeftBranch(node, s);
 			if (s.empty())
 			{
 				break;
@@ -306,28 +301,43 @@ public:
 		}
 	}
 
+	void goAlongVistLeftBranch(TreeNode<T> * &node, std::stack<TreeNode<T> *> &s)
+	{
+		while (node != NULL)
+		{
+			visitNode(node);
+			s.push(node->rightchild);
+			node = node->leftchild;
+		}
+	}
+	void visitNode(const PTNODE node)
+	{
+		cout << node->data << " , ";
+	}
+
 	void midTraverse()
 	{
 		stack<PTNODE> s;
 		PTNODE node = rootNode;
 		while (1)
 		{
-			while (node != NULL)
-			{
-				s.push(node);
-				node = node->leftchild;
-			}
+			goAlongLeftBranch(node, s);
 			if (s.empty())
 			{
 				break;
 			}
 			node = s.top();
 			s.pop();
-			if (node != NULL)
-			{
-				cout << node->data << ", ";	
-				node = node->rightchild;
-			}       	
+			visitNode(node);
+			node = node->rightchild;
+		}
+	}
+	void goAlongLeftBranch(TreeNode<T> * &node, std::stack<TreeNode<T> *> &s)
+	{
+		while (node != NULL)
+		{
+			s.push(node);
+			node = node->leftchild;
 		}
 	}
 private:
