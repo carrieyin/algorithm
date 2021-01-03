@@ -5,6 +5,7 @@ using namespace std;
 #include<stack>
 #include<stdlib.h>
 
+/*
 template<class T>
 struct BinTreeNode
 {
@@ -267,7 +268,7 @@ private:
 private:
 	pNode root;
 };
-
+*/
 template <class T>
 struct TreeNode
 {
@@ -340,6 +341,21 @@ public:
 			node = node->leftchild;
 		}
 	}
+
+	//≤„–Ú±È¿˙
+	void layerTraverse()
+	{
+		queue<PTNODE> q;
+		q.push(rootNode);
+		while (!q.empty())
+		{
+			PTNODE node = q.front();
+			visitNode(node);
+			q.pop();
+			enqueue(q, node->leftchild);
+			enqueue(q, node->rightchild);
+		}
+	}
 private:
 	void createBinTree(T* array, int length) {
 		
@@ -360,6 +376,14 @@ private:
 			pnode = node;
 		}
 	}
+	void enqueue(queue<PTNODE>& q, PTNODE node)
+	{
+		if (node != NULL)
+		{
+			q.push(node);
+		}
+	}
+
 private:
 	TreeNode<T> *rootNode;
 } ;
@@ -375,10 +399,10 @@ void test01()
 void test02()
 {
 	char pStr[] = { 'A','B','D','#','#','#','C','E','#','#','F' };
-	BinTree<char> bt1(pStr, sizeof(pStr) / sizeof(pStr[0]), '#');
+	//BinTree<char> bt1(pStr, sizeof(pStr) / sizeof(pStr[0]), '#');
 
 	cout << "µ›πÈ«∞–Ú±È¿˙£∫" << endl;
-	bt1.PreOrder();
+	//bt1.PreOrder();
 }
 
 void test03()
@@ -387,9 +411,18 @@ void test03()
 	BinaryTree<char> bt1(pStr, sizeof(pStr) / sizeof(pStr[0]));
 	bt1.midTraverse();
 }
+
+void test04()
+{
+	char pStr[] = { 'A','B','D','#','#','#','C','E','#','#','F' };
+	BinaryTree<char> bt1(pStr, sizeof(pStr) / sizeof(pStr[0]));
+	cout << endl << "≤„–Ú±È¿˙Œ™:" << endl;
+	bt1.layerTraverse();
+}
 int main()
 {
 	test01();
 	test03();
+	test04();
 	cout << endl;
 }
