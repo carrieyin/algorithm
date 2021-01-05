@@ -45,7 +45,7 @@ bool paren(vector<char>& v)
 
 //栈混洗序列判定
 //其中origin是原序列 seq是混洗序列，判定seq是不是origin的混洗序列
-bool isPermutationSeq(vector<int>& origin, vector<int>& seq)
+bool isPermutationSeq(vector<int> origin, vector<int> seq)
 {
 	stack<int> a;
 	int i = 0;  int j = 0;
@@ -67,6 +67,8 @@ bool isPermutationSeq(vector<int>& origin, vector<int>& seq)
 	
 	return a.empty();
 }
+
+
 
 //读取尽可能多的数字，因为计算时候可能有多位,本处先不考虑小数点
 void readNumber(const char **s, stack<float>& opnd)
@@ -250,9 +252,41 @@ void test01()
 
 }
 
+//按照混洗栈的行程过程，模拟。
+//使用一个S栈临时存储原队列。ori只向其中Push，S在跟混洗元素相同的情况下pop
+bool isPermutaionSeq1(stack<int>& ori, stack<int>& seq)
+{
+	stack<int> s;
+	stack<int> temp;
+	while (!seq.empty()) {
+		temp.push(seq.top());
+		seq.pop();
+	}
+	while (!ori.empty())
+	{
+		if (s.empty() || s.top() != temp.top())
+		{
+			s.push(ori.top());
+			ori.pop();
+		}
+
+		if (s.top() == temp.top())
+		{
+			temp.pop();
+			s.pop();
+		}
+	}
+
+	while (!s.empty() && s.top() == temp.top())
+	{
+		s.pop();
+		temp.pop();
+	}
+	return s.empty();
+}
 void test02()
 {
-	vector<int> v = { 1, 2, 3, 5, 6,7 };
+	/*vector<int> v = { 1, 2, 3, 5, 6,7 };
 	vector<int> seq = { 3, 2, 1, 5, 6, 7 };
 	cout << isPermutationSeq(v, seq) << endl;
 	vector<int> v1 = { 1, 2, 3, 5, 6,7 };
@@ -260,17 +294,41 @@ void test02()
 	cout << isPermutationSeq(v1, seq1) << endl;
 	vector<int> v2 = { 1, 2, 3, 5, 6, 7 };
 	vector<int> seq2 = { 1, 3, 2, 7, 6, 5 };
-	cout << isPermutationSeq(v2, seq2) << endl;
-}
+	cout << isPermutationSeq(v2, seq2) << endl;*/
+	stack<int> s;
+	s.push(1);
+	s.push(2);
+	s.push(3);
+	s.push(4);
+	s.push(5);
+	s.push(6);
+	stack<int> seq;
+	seq.push(2);
+	seq.push(1);
+	seq.push(3);
+	seq.push(4);
+	seq.push(6);
+	seq.push(5);
+	cout <<"是否混洗:" << isPermutaionSeq1(s, seq) << endl;
 
+	stack<int> seq1;
+	seq1.push(2);
+	seq1.push(1);
+	seq1.push(3);
+	seq1.push(4);
+	seq1.push(6);
+	seq1.push(5);
+	cout << isPermutaionSeq1(s, seq1) << endl;
+}
 void test03()
 {
 	const char * s = "1+2*3#";
 	cout << evaluate(s) << endl;
 }
+
 int main()
 {
 	//test01();
-	//test02();
-	test03();
+	test02();
+	//test03();
 }
