@@ -257,30 +257,34 @@ void test01()
 bool isPermutaionSeq1(stack<int>& ori, stack<int>& seq)
 {
 	stack<int> s;
-	stack<int> temp;
-	while (!seq.empty()) {
-		temp.push(seq.top());
-		seq.pop();
+	stack<int> tem;
+	//因为要比较首先入栈的元素，而首先入栈的元素在栈底，所以先逆序保存一下
+	while (!seq.empty())
+	{
+		tem.push(seq.top());
+		tem.pop();
 	}
 	while (!ori.empty())
 	{
-		if (s.empty() || s.top() != temp.top())
+		if (s.empty() || s.top() != tem.top())
 		{
 			s.push(ori.top());
 			ori.pop();
 		}
 
-		if (s.top() == temp.top())
+		if (s.top() == tem.top())
 		{
-			temp.pop();
-			s.pop();
+			seq.pop();
+			tem.pop();
+			
 		}
+		cout << endl;
 	}
 
-	while (!s.empty() && s.top() == temp.top())
+	while (!s.empty() && s.top() == seq.top())
 	{
 		s.pop();
-		temp.pop();
+		seq.pop();
 	}
 	return s.empty();
 }
@@ -303,21 +307,28 @@ void test02()
 	s.push(5);
 	s.push(6);
 	stack<int> seq;
-	seq.push(2);
+	/*seq.push(2);
 	seq.push(1);
 	seq.push(3);
 	seq.push(4);
 	seq.push(6);
 	seq.push(5);
-	cout <<"是否混洗:" << isPermutaionSeq1(s, seq) << endl;
+	cout <<"是否混洗:" << isPermutaionSeq1(s, seq) << endl;*/
 
 	stack<int> seq1;
+	/*seq1.push(1);
 	seq1.push(2);
-	seq1.push(1);
 	seq1.push(3);
 	seq1.push(4);
 	seq1.push(6);
+	seq1.push(5);*/
 	seq1.push(5);
+	seq1.push(6);
+	seq1.push(4);
+	seq1.push(3);
+	seq1.push(2);
+	seq1.push(1);
+
 	cout << isPermutaionSeq1(s, seq1) << endl;
 }
 void test03()
